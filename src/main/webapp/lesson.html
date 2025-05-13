@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Course Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            padding: 20px;
+        }
+
+        .course-card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            margin: 15px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .course-card:hover {
+            transform: scale(1.05);
+        }
+
+        .course-card-header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+            font-size: 18px;
+            text-align: center;
+        }
+
+        .lesson-content {
+            display: none;
+            padding: 15px;
+            text-align: left;
+            background-color: #f9f9f9;
+            border-bottom-left-radius: 8px;
+            border-bottom-right-radius: 8px;
+        }
+
+        .lesson-content p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Course Card 1 -->
+        <div class="course-card" onclick="toggleLesson('lesson-1')">
+            <div class="course-card-header">Lesson 1: Introduction to HTML</div>
+            <div class="lesson-content" id="lesson-1">
+                <p>This lesson introduces the basics of HTML, including tags, attributes, and structure.</p>
+            </div>
+        </div>
+
+        <!-- Course Card 2 -->
+        <div class="course-card" onclick="toggleLesson('lesson-2')">
+            <div class="course-card-header">Lesson 2: CSS Basics</div>
+            <div class="lesson-content" id="lesson-2">
+                <p>This lesson covers the basics of CSS, including selectors, properties, and styling techniques.</p>
+            </div>
+        </div>
+
+        <!-- Course Card 3 -->
+        <div class="course-card" onclick="toggleLesson('lesson-3')">
+            <div class="course-card-header">Lesson 3: JavaScript Essentials</div>
+            <div class="lesson-content" id="lesson-3">
+                <p>This lesson dives into JavaScript fundamentals, including variables, functions, and control structures.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleLesson(lessonId) {
+            var lesson = document.getElementById(lessonId);
+            if (lesson.style.display === "none" || lesson.style.display === "") {
+                lesson.style.display = "block";
+            } else {
+                lesson.style.display = "none";
+            }
+        }
+    </script>
+
+</body>
+</html>

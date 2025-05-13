@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dev Path Learning Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #ffffff;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .login-box h1 {
+      font-size: 32px;
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    form input {
+      width: 100%;
+      padding: 12px 10px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+
+    /* Custom dropdown */
+    .custom-select {
+      position: relative;
+      margin-bottom: 15px;
+    }
+
+    .custom-select-selected {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 12px 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .custom-select-items {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #ccc;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      z-index: 99;
+      background-color: #fff;
+      display: none;
+    }
+
+    .custom-select-items div {
+      padding: 12px 10px;
+      cursor: pointer;
+    }
+
+    .custom-select-items div:hover {
+      background-color: #f0f0f0;
+    }
+
+    .custom-select-items .selected {
+      background-color: #ffd800;
+      font-weight: bold;
+    }
+
+    form button {
+      width: 100%;
+      padding: 12px;
+      background-color: #ffd800;
+      color: #000;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    form button:hover {
+      background-color: #e6c700;
+    }
+
+    @media (max-width: 400px) {
+      .login-box h1 {
+        font-size: 28px;
+      }
+
+      form input,
+      .custom-select-selected,
+      form button {
+        font-size: 13px;
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h1><span>DEV PATH</span><br>LEARNING</h1>
+    <form id="loginForm">
+      <input id="studentNumber" type="text" placeholder="Student Number" required />
+      <input id="userId" type="text" placeholder="User ID" required />
+      <input id="password" type="password" placeholder="Password" required />
+
+      <!-- Custom dropdown -->
+      <div class="custom-select" id="semesterSelect">
+        <div class="custom-select-selected">Summer (2025)</div>
+        <div class="custom-select-items">
+          <div class="selected">Summer (2025)</div>
+          <div>Second Semester (2024–2025)</div>
+          <div>First Semester (2024–2025)</div>
+        </div>
+      </div>
+
+      <button type="submit">Login</button>
+    </form>
+  </div>
+
+  <script>
+    // Dropdown functionality
+    const select = document.getElementById("semesterSelect");
+    const selected = select.querySelector(".custom-select-selected");
+    const options = select.querySelector(".custom-select-items");
+
+    selected.addEventListener("click", () => {
+      options.style.display = options.style.display === "block" ? "none" : "block";
+    });
+
+    options.addEventListener("click", (e) => {
+      if (e.target.tagName === "DIV") {
+        selected.textContent = e.target.textContent;
+        [...options.children].forEach(el => el.classList.remove("selected"));
+        e.target.classList.add("selected");
+        options.style.display = "none";
+      }
+    });
+
+    document.addEventListener("click", function(e) {
+      if (!select.contains(e.target)) {
+        options.style.display = "none";
+      }
+    });
+
+    // Login handling
+    document.getElementById('loginForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const studentNumber = document.getElementById('studentNumber').value.trim();
+      const userId = document.getElementById('userId').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const semester = selected.textContent;
+
+      if (!studentNumber || !userId || !password) {
+        alert("Please fill in all fields.");
+        return;
+      }
+
+      // Store user info to localStorage
+      const userInfo = {
+        studentNumber,
+        userId,
+        semester
+      };
+
+      localStorage.setItem('userInfo', JSON.stringify(userInfo));
+      window.location.href = "dashboard.html";
+    });
+  </script>
+</body>
+</html>

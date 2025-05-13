@@ -1,0 +1,6 @@
+com\devpathlearning\App.class
+com\devpathlearning\TaskManagerServlet.class
+com\devpathlearning\CourseSearchServlet.class
+com\devpathlearning\LearningPathsServlet.class
+com\devpathlearning\DashboardServlet.class
+com\devpathlearning\LoginServlet.class

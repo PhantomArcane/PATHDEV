@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendar - Learn Ahead Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="nav-brand">Learn Ahead</div>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="profile.html">Profile</a>
+            <a href="calendar.html" class="active">Calendar</a>
+            <a href="task-manager.html">Tasks</a>
+            <a href="course-search.html">Courses</a>
+        </div>
+        <div class="nav-right">
+            <a href="index.html" onclick="handleLogout(event)" class="logout-btn">Logout</a>
+        </div>
+    </nav>
+
+    <div class="page-container">
+        <header class="page-header">
+            <div class="header-content">
+                <div class="header-left">
+                    <h1>Academic Calendar</h1>
+                    <p class="text-light">View and manage your academic schedule</p>
+                </div>
+                <div class="header-right">
+                    <div class="date-navigation">
+                        <button onclick="previousMonth()" class="nav-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M12 4l-6 6 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <h2 id="currentMonth" class="current-month">Loading...</h2>
+                        <button onclick="nextMonth()" class="nav-btn">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M8 4l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="calendar-layout">            <div class="calendar-wrapper">
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Calendar will be generated here -->
+                </div>
+                <div class="events-panel">
+                    <div class="events-header">
+                        <h2>Upcoming Events</h2>
+                        <button class="primary-btn" onclick="showAddEventForm()">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <path d="M10 4v12M4 10h12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                            Add Event
+                        </button>
+                    </div>
+                    <div id="eventsList" class="events-list">
+                        <!-- Events will be loaded here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Event Modal -->
+    <div id="addEventModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Event</h2>
+                <button type="button" class="close-btn" onclick="closeAddEventForm()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            <form id="addEventForm" onsubmit="handleAddEvent(event)">
+                <div class="form-group">
+                    <label for="eventTitle">Event Title</label>
+                    <input type="text" id="eventTitle" name="title" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="eventDate">Date</label>
+                        <input type="date" id="eventDate" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="eventTime">Time</label>
+                        <input type="time" id="eventTime" name="time" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="eventDescription">Description</label>
+                    <textarea id="eventDescription" name="description" rows="3"></textarea>
+                </div>
+                <div class="form-buttons">
+                    <button type="button" class="secondary-btn" onclick="closeAddEventForm()">Cancel</button>
+                    <button type="submit" class="primary-btn">Create Event</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentDate = new Date();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if user is logged in
+            const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+            if (!userInfo) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            // Demo events
+            const events = [
+                { date: '2025-05-11', title: 'Team Meeting', time: '2:00 PM' },
+                { date: '2025-05-12', title: 'Project Deadline', time: '11:59 PM' },
+                { date: '2025-05-18', title: 'Midterm Exam', time: '9:00 AM' }
+            ];
+
+            generateCalendar(currentDate);
+            displayEvents(events);
+        });        function generateCalendar(date) {
+            const month = date.getMonth();
+            const year = date.getFullYear();
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            
+            document.getElementById('currentMonth').textContent = 
+                date.toLocaleString('default', { month: 'long', year: 'numeric' });
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = `
+                <div class="calendar-day-header">Sun</div>
+                <div class="calendar-day-header">Mon</div>
+                <div class="calendar-day-header">Tue</div>
+                <div class="calendar-day-header">Wed</div>
+                <div class="calendar-day-header">Thu</div>
+                <div class="calendar-day-header">Fri</div>
+                <div class="calendar-day-header">Sat</div>
+            `;
+
+            // Add empty cells for days before the first of the month
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                grid.innerHTML += '<div class="calendar-day empty"></div>';
+            }
+
+            // Add days of the month
+            const events = JSON.parse(localStorage.getItem('events') || '[]');
+            for (let day = 1; day <= lastDay.getDate(); day++) {
+                const currentDay = new Date(year, month, day);
+                const isToday = currentDay.toDateString() === today.toDateString();
+                const isPast = currentDay < today;
+                
+                // Check for events on this day
+                const dayEvents = events.filter(event => {
+                    const eventDate = new Date(event.date);
+                    return eventDate.getDate() === day &&
+                           eventDate.getMonth() === month &&
+                           eventDate.getFullYear() === year;
+                });
+                
+                grid.innerHTML += `
+                    <div class="calendar-day${isToday ? ' today' : ''}${isPast ? ' past' : ''}" 
+                         onclick="selectDate(${year}, ${month}, ${day})">
+                        <span class="day-number">${day}</span>
+                        ${dayEvents.length > 0 ? `
+                            <div class="event-dot${dayEvents.length > 1 ? ' multiple' : ''}"></div>
+                        ` : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function displayEvents(events) {
+            const eventsList = document.getElementById('eventsList');
+            eventsList.innerHTML = '';
+
+            // Sort events by date and time
+            events.sort((a, b) => {
+                const dateA = new Date(a.date + ' ' + a.time);
+                const dateB = new Date(b.date + ' ' + b.time);
+                return dateA - dateB;
+            });
+
+            // Group events by date
+            const groupedEvents = events.reduce((groups, event) => {
+                const date = new Date(event.date);
+                const dateKey = date.toISOString().split('T')[0];
+                if (!groups[dateKey]) {
+                    groups[dateKey] = [];
+                }
+                groups[dateKey].push(event);
+                return groups;
+            }, {});
+
+            // Display events by date
+            Object.entries(groupedEvents).forEach(([date, dayEvents]) => {
+                const eventDate = new Date(date);
+                const dateHeader = document.createElement('div');
+                dateHeader.className = 'event-date-header';
+                dateHeader.innerHTML = `
+                    <span class="event-date">
+                        <span class="date-day">${eventDate.getDate()}</span>
+                        <span class="date-month">${eventDate.toLocaleString('default', { month: 'short' })}</span>
+                    </span>
+                `;
+                eventsList.appendChild(dateHeader);
+
+                dayEvents.forEach(event => {
+                    const eventEl = document.createElement('div');
+                    eventEl.className = 'event-item';
+                    eventEl.innerHTML = `
+                        <div class="event-time">${formatTime(event.time)}</div>
+                        <div class="event-content">
+                            <div class="event-title">${event.title}</div>
+                            ${event.description ? `<div class="event-description">${event.description}</div>` : ''}
+                        </div>
+                    `;
+                    eventsList.appendChild(eventEl);
+                });
+            });
+
+            if (events.length === 0) {
+                eventsList.innerHTML = '<div class="no-events">No upcoming events</div>';
+            }
+        }
+
+        function formatTime(time) {
+            const [hours, minutes] = time.split(':');
+            const date = new Date();
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            return date.toLocaleString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+        }
+
+        function previousMonth() {
+            currentDate.setMonth(currentDate.getMonth() - 1);
+            generateCalendar(currentDate);
+        }
+
+        function nextMonth() {
+            currentDate.setMonth(currentDate.getMonth() + 1);
+            generateCalendar(currentDate);
+        }
+
+        function selectDate(year, month, day) {
+            const selectedDate = new Date(year, month, day);
+            document.getElementById('eventDate').value = selectedDate.toISOString().split('T')[0];
+            showAddEventForm();
+        }
+
+        function showAddEventForm() {
+            document.getElementById('addEventModal').style.display = 'flex';
+            if (!document.getElementById('eventDate').value) {
+                document.getElementById('eventDate').value = new Date().toISOString().split('T')[0];
+            }
+        }
+
+        function closeAddEventForm() {
+            document.getElementById('addEventModal').style.display = 'none';
+            document.getElementById('addEventForm').reset();
+        }
+
+        function handleAddEvent(event) {
+            event.preventDefault();
+            const form = event.target;
+            const newEvent = {
+                title: form.title.value,
+                date: form.date.value,
+                time: form.time.value,
+                description: form.description.value
+            };
+
+            // In a real app, this would be sent to a server
+            const events = JSON.parse(localStorage.getItem('events') || '[]');
+            events.push(newEvent);
+            localStorage.setItem('events', JSON.stringify(events));
+
+            generateCalendar(currentDate);
+            displayEvents(events);
+            closeAddEventForm();
+        }
+
+        function handleLogout(event) {
+            event.preventDefault();
+            localStorage.removeItem('userInfo');
+            window.location.href = 'index.html';
+        }
+    </script>
+</body>
+</html>

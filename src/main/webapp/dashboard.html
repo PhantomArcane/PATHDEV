@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dev Path Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f4f4f4;
+      color: #222;
+    }
+
+    nav {
+      background: #fff;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .nav-left, .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .nav-brand {
+      font-weight: 700;
+      color: #facc15;
+      font-size: 1.25rem;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: #333;
+      font-weight: 500;
+    }
+
+    nav a.active {
+      font-weight: 700;
+    }
+
+    .profile-img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .dashboard-container {
+      padding: 2rem;
+    }
+
+    .dashboard-header h1 {
+      font-size: 1.75rem;
+      font-weight: 700;
+    }
+
+    .dashboard-header p {
+      color: #555;
+      margin-top: 0.25rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+      margin-top: 2rem;
+    }
+
+    .stat-card {
+      background: #facc15;
+      padding: 1rem;
+      border-radius: 10px;
+      color: #000;
+    }
+
+    .stat-card h3 {
+      font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .stat-value {
+      font-size: 1.5rem;
+      font-weight: bold;
+      margin: 0.5rem 0;
+    }
+
+    .courses, .upcoming-tasks {
+      margin-top: 2rem;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .view-all {
+      font-size: 0.9rem;
+      color: #333;
+      text-decoration: underline;
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+    }
+
+    a.course-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .course-card {
+      background: #fff;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease;
+    }
+
+    .course-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .course-image {
+      height: 120px;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .course-info {
+      padding: 1rem;
+    }
+
+    .course-code {
+      font-size: 0.75rem;
+      color: #555;
+    }
+
+    .course-info h3 {
+      margin-top: 0.25rem;
+      font-size: 1rem;
+      font-weight: 700;
+      color: #000;
+    }
+
+    .course-info p {
+      font-size: 0.875rem;
+      margin: 0.5rem 0;
+      color: #444;
+    }
+
+    .course-meta {
+      font-size: 0.75rem;
+      display: flex;
+      justify-content: space-between;
+      color: #555;
+    }
+
+    .task-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .task-item {
+      background: #fff;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .task-title {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .task-course {
+      font-size: 0.85rem;
+      color: #777;
+    }
+
+    .task-meta {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+      font-size: 0.8rem;
+    }
+
+    .task-priority {
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .priority-high {
+      background: #facc15;
+      color: #000;
+    }
+
+    .priority-medium {
+      background: #fbbf24;
+      color: #000;
+    }
+
+    .overdue {
+      color: red;
+      font-weight: bold;
+    }
+
+    @media (max-width: 768px) {
+      .nav-left, .nav-right {
+        gap: 0.75rem;
+        font-size: 0.85rem;
+      }
+
+      .dashboard-container {
+        padding: 1rem;
+      }
+
+      .dashboard-header h1 {
+        font-size: 1.25rem;
+      }
+
+      .section-header h2 {
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <div class="nav-brand">Dev Path</div>
+      <a href="#" class="active">Home</a>
+      <a href="#">My Courses</a>
+      <a href="course-search.html">Find Courses</a>
+      <a href="learning-paths.html">Learning Paths</a>
+      <a href="task-manager.html">Tasks</a>
+      <a href="profile.html">Profile</a>
+    </div>
+    <div class="nav-right"></div>
+  </nav>
+
+  <div class="dashboard-container">
+    <header class="dashboard-header">
+      <h1>Welcome back, Harold</h1>
+      <p>BS Computer Science • Year 3 • TUPT-18-0001</p>
+    </header>
+
+    <section class="stats">
+      <div class="stat-card"><h3>Enrolled Courses</h3><div class="stat-value">4</div><p>Active courses</p></div>
+      <div class="stat-card"><h3>Pending Tasks</h3><div class="stat-value">3</div><p>Assignments & quizzes</p></div>
+      <div class="stat-card"><h3>Academic Progress</h3><div class="stat-value">75%</div><p>Towards your degree</p></div>
+      <div class="stat-card"><h3>GPA</h3><div class="stat-value">3.7</div><p>Current GPA</p></div>
+    </section>
+
+    <section class="courses">
+      <div class="section-header">
+        <h2>My Coding Courses</h2>
+        <a href="#" class="view-all">View all</a>
+      </div>
+      <div class="course-grid">
+        <a href="lesson.html" class="course-link">
+          <div class="course-card">
+            <div class="course-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSiC2mIzqFl4CBaPX_mWvDy67VMghkHu-OWZw&s')"></div>
+            <div class="course-info">
+              <span class="course-code">CSC101</span>
+              <h3>Introduction to Programming</h3>
+              <p>Fundamentals of programming using Python language.</p>
+              <div class="course-meta"><span>Year 1, Sem 1</span><span>3 Credits</span></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="lesson.html" class="course-link">
+          <div class="course-card">
+            <div class="course-image" style="background-image: url('https://cdn.prod.website-files.com/5dcc7f8c449e597be23356e0/65788300e4727694b6898722_top-algorithms-and-data-structures-you-really-need-to-know-blog-hero-image.webp')"></div>
+            <div class="course-info">
+              <span class="course-code">CSC201</span>
+              <h3>Data Structures and Algorithms</h3>
+              <p>Study of data structures and algorithms for efficient problem solving.</p>
+              <div class="course-meta"><span>Year 2, Sem 1</span><span>4 Credits</span></div>
+            </div>
+          </div>
+        </a>
+
+        <a href="lesson.html" class="course-link">
+          <div class="course-card">
+            <div class="course-image" style="background-image: url('https://cdn.corporatefinanceinstitute.com/assets/database-1024x703.jpeg')"></div>
+            <div class="course-info">
+              <span class="course-code">CSC301</span>
+              <h3>Database Systems</h3>
+              <p>Introduction to database design, development, and management.</p>
+              <div class="course-meta"><span>Year 2, Sem 2</span><span>3 Credits</span></div>
+            </div>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <section class="upcoming-tasks">
+      <div class="section-header">
+        <h2>Upcoming Tasks</h2>
+        <a href="#" class="view-all">View all</a>
+      </div>
+      <div class="task-list">
+        <div class="task-item">
+          <div class="task-info">
+            <h3 class="task-title">Programming Assignment 3</h3>
+            <p class="task-course">Intro to Programming</p>
+          </div>
+          <div class="task-meta">
+            <span class="task-priority priority-high">High</span>
+            <span class="task-due">Due: May 15, 2025</span>
+          </div>
+        </div>
+        <div class="task-item">
+          <div class="task-info">
+            <h3 class="task-title">Algorithm Analysis Report</h3>
+            <p class="task-course">Data Structures and Algorithms</p>
+          </div>
+          <div class="task-meta">
+            <span class="task-priority priority-medium">Medium</span>
+            <span class="task-due overdue">Overdue</span>
+          </div>
+        </div>
+        <div class="task-item">
+          <div class="task-info">
+            <h3 class="task-title">Database Design Project</h3>
+            <p class="task-course">Database Systems</p>
+          </div>
+          <div class="task-meta">
+            <span class="task-priority priority-high">High</span>
+            <span class="task-due">Due: May 20, 2025</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

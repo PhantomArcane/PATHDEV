@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager - Dev Path Learning</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav>
+        <div class="nav-left">
+            <div class="nav-brand">Dev Path Learning</div>
+            <a href="dashboard.html">Home</a>
+            <a href="course-search.html">Find Courses</a>
+            <a href="learning-paths.html">Learning Paths</a>
+            <a href="task-manager.html" class="active">Tasks</a>
+        </div>
+        <div class="nav-right">
+            <a href="#" class="profile-link">
+         
+            </a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <header class="page-header">
+            <div class="header-content">
+                <h1>Task Manager</h1>
+                <p>Organize and track your assignments and deadlines</p>
+            </div>
+            <button class="add-task-btn">+ Add Task</button>
+        </header>
+
+        <div class="task-manager-content">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Search tasks...">
+                <div class="task-filters">
+                    <button class="filter-btn active">All (5)</button>
+                    <button class="filter-btn">Pending (3)</button>
+                    <button class="filter-btn">Completed (2)</button>
+                </div>
+            </div>
+
+            <div class="task-list">
+                <div class="task-item">
+                    <div class="task-checkbox"></div>
+                    <div class="task-info">
+                        <h3 class="task-title">Programming Assignment 3</h3>
+                        <p class="task-description">Complete exercises 5-10 in Chapter 7</p>
+                        <p class="task-course">Introduction to Programming</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-priority priority-high">High</span>
+                        <span class="task-due">Due May 15, 2025</span>
+                    </div>
+                </div>
+
+                <div class="task-item highlighted">
+                    <div class="task-checkbox"></div>
+                    <div class="task-info">
+                        <h3 class="task-title">Algorithm Analysis Report</h3>
+                        <p class="task-description">Write a comparative analysis of sorting algorithms</p>
+                        <p class="task-course">Data Structures and Algorithms</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-priority priority-medium">Medium</span>
+                        <span class="task-due overdue">Due May 10, 2025</span>
+                    </div>
+                </div>
+
+                <div class="task-item">
+                    <div class="task-checkbox"></div>
+                    <div class="task-info">
+                        <h3 class="task-title">Database Design Project</h3>
+                        <p class="task-description">Submit ER diagram and schema for library system</p>
+                        <p class="task-course">Database Systems</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-priority priority-high">High</span>
+                        <span class="task-due">Due May 20, 2025</span>
+                    </div>
+                </div>
+
+                <div class="task-item completed">
+                    <div class="task-checkbox checked"></div>
+                    <div class="task-info">
+                        <h3 class="task-title">Software Requirements Doc</h3>
+                        <p class="task-description">Complete Section 3: User Stories</p>
+                        <p class="task-course">Software Engineering</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-priority priority-medium">Medium</span>
+                        <span class="task-due">Completed</span>
+                    </div>
+                </div>
+
+                <div class="task-item completed">
+                    <div class="task-checkbox checked"></div>
+                    <div class="task-info">
+                        <h3 class="task-title">Midterm Review Quiz</h3>
+                        <p class="task-description">Take practice quiz for chapters 1-5</p>
+                        <p class="task-course">Data Structures and Algorithms</p>
+                    </div>
+                    <div class="task-meta">
+                        <span class="task-priority priority-low">Low</span>
+                        <span class="task-due">Completed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/task-manager.js"></script>
+</body>
+</html>

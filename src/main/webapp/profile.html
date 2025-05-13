@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Profile - Dev Path Learning</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #f7f7f7;
+    }
+    nav {
+      display: flex;
+      justify-content: space-between;
+      background-color: #ffd800;
+      padding: 12px 24px;
+      align-items: center;
+    }
+    .nav-left a {
+      margin-right: 20px;
+      text-decoration: none;
+      color: black;
+      font-weight: 500;
+    }
+    .nav-left .active {
+      text-decoration: underline;
+    }
+    .nav-right .logout-btn {
+      text-decoration: none;
+      color: black;
+      font-weight: 600;
+    }
+
+    .page-container {
+      padding: 24px;
+    }
+
+    .profile-header-card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .profile-header-content {
+      display: flex;
+      align-items: center;
+    }
+
+    .profile-avatar img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #ccc;
+    }
+
+    .profile-avatar {
+      position: relative;
+      margin-right: 20px;
+    }
+
+    .edit-avatar-btn {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: #ffd800;
+      border: none;
+      border-radius: 50%;
+      padding: 6px;
+      cursor: pointer;
+    }
+
+    .profile-info h1 {
+      margin-bottom: 4px;
+      font-size: 24px;
+    }
+
+    .text-light {
+      color: gray;
+    }
+
+    .profile-content {
+      margin-top: 20px;
+      display: flex;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .profile-main,
+    .profile-sidebar {
+      flex: 1;
+      min-width: 320px;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 8px rgba(0,0,0,0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .info-item label {
+      font-weight: bold;
+      display: block;
+    }
+
+    .info-value {
+      margin-top: 4px;
+      display: block;
+    }
+
+    .status-badge.good {
+      color: green;
+      font-weight: bold;
+    }
+
+    .performance-grid {
+      display: flex;
+      gap: 20px;
+    }
+
+    .stat-card {
+      background-color: #f0f0f0;
+      padding: 12px;
+      border-radius: 8px;
+      flex: 1;
+      text-align: center;
+    }
+
+    .stat-label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 4px;
+    }
+
+    .gpa-trend {
+      margin-top: 20px;
+    }
+
+    .trend-graph {
+      display: flex;
+      align-items: flex-end;
+      gap: 10px;
+      height: 100px;
+    }
+
+    .trend-bar {
+      width: 20px;
+      background: #ffd800;
+      position: relative;
+      text-align: center;
+      color: black;
+      font-size: 12px;
+    }
+
+    .trend-bar span {
+      position: absolute;
+      top: -20px;
+      left: -10px;
+    }
+
+    .trend-bar.current {
+      background: orange;
+    }
+
+    .trend-labels {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 12px;
+    }
+
+    .progress-summary .progress-item {
+      margin-bottom: 12px;
+    }
+
+    .progress-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 4px;
+    }
+
+    .progress-bar {
+      background: #ddd;
+      height: 10px;
+      border-radius: 4px;
+    }
+
+    .progress {
+      background: #ffd800;
+      height: 10px;
+      border-radius: 4px;
+    }
+
+    .achievement-list .achievement {
+      display: flex;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .achievement-icon {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+
+    .achievement-info h4 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .achievement-info p {
+      margin: 0;
+      font-size: 12px;
+      color: gray;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-left">
+      <a href="dashboard.html">Dashboard</a>
+      <a href="profile.html" class="active">Profile</a>
+      <a href="calendar.html">Calendar</a>
+      <a href="task-manager.html">Tasks</a>
+      <a href="course-search.html">Courses</a>
+    </div>
+    <div class="nav-right">
+      <a href="index.html" onclick="handleLogout(event)" class="logout-btn">Logout</a>
+    </div>
+  </nav>
+
+  <div class="page-container">
+    <div class="profile-header-card">
+      <div class="profile-header-content">
+        <div class="profile-avatar">
+          <img src="https://i.pinimg.com/736x/40/ec/e6/40ece61a20b180e6b285fdec914ff5cc.jpg" alt="Profile Picture" id="profilePic" onerror="this.onerror=null; this.src='https://via.placeholder.com/100'"/>
+          <button class="edit-avatar-btn" title="Edit Avatar">
+            ✏️
+          </button>
+        </div>
+        <div class="profile-info">
+          <h1 id="studentName">Loading...</h1>
+          <p id="studentDetails" class="text-light">Loading...</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-content">
+      <div class="profile-main">
+        <div class="card">
+          <div class="card-header">
+            <h2>Academic Information</h2>
+          </div>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Student Number</label>
+              <span id="studentNumber" class="info-value">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Current Semester</label>
+              <span id="semester" class="info-value">Loading...</span>
+            </div>
+            <div class="info-item">
+              <label>Program</label>
+              <span class="info-value">BS Computer Science</span>
+            </div>
+            <div class="info-item">
+              <label>Year Level</label>
+              <span class="info-value">3rd Year</span>
+            </div>
+            <div class="info-item">
+              <label>Major</label>
+              <span class="info-value">Software Engineering</span>
+            </div>
+            <div class="info-item">
+              <label>Academic Status</label>
+              <span class="info-value"><span class="status-badge good">Good Standing</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h2>Performance Summary</h2></div>
+          <div class="performance-grid">
+            <div class="stat-card">
+              <span class="stat-label">Current GPA</span>
+              <span class="stat-value">3.7</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Completed Courses</span>
+              <span class="stat-value">16</span>
+            </div>
+            <div class="stat-card">
+              <span class="stat-label">Current Courses</span>
+              <span class="stat-value">4</span>
+            </div>
+          </div>
+          <div class="gpa-trend">
+            <h3>GPA Trend</h3>
+            <div class="trend-graph">
+              <div class="trend-bar" style="height: 60%"><span>3.5</span></div>
+              <div class="trend-bar" style="height: 70%"><span>3.6</span></div>
+              <div class="trend-bar" style="height: 75%"><span>3.7</span></div>
+              <div class="trend-bar current" style="height: 74%"><span>3.7</span></div>
+            </div>
+            <div class="trend-labels">
+              <span>1st Year</span>
+              <span>2nd Year</span>
+              <span>3rd Year</span>
+              <span>Current</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="profile-sidebar">
+        <div class="card">
+          <div class="card-header"><h2>Current Progress</h2></div>
+          <div class="progress-summary">
+            <div class="progress-item">
+              <div class="progress-header"><span>Course Completion</span><span>80%</span></div>
+              <div class="progress-bar"><div class="progress" style="width: 80%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>Assignment Completion</span><span>92%</span></div>
+              <div class="progress-bar"><div class="progress" style="width: 92%"></div></div>
+            </div>
+            <div class="progress-item">
+              <div class="progress-header"><span>Attendance Rate</span><span>95%</span></div>
+              <div class="progress-bar"><div class="progress" style="width: 95%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card achievements">
+          <div class="card-header"><h2>Achievements</h2></div>
+          <div class="achievement-list">
+            <div class="achievement">
+              <div class="achievement-icon">🏆</div>
+              <div class="achievement-info">
+                <h4>Dean's Lister</h4>
+                <p>3 consecutive semesters</p>
+              </div>
+            </div>
+            <div class="achievement">
+              <div class="achievement-icon">⭐</div>
+              <div class="achievement-info">
+                <h4>Perfect Attendance</h4>
+                <p>Current semester</p>
+              </div>
+            </div>
+            <div class="achievement">
+              <div class="achievement-icon">🎯</div>
+              <div class="achievement-info">
+                <h4>Top Performer</h4>
+                <p>Software Engineering</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+      if (!userInfo) {
+        window.location.href = 'index.html';
+        return;
+      }
+
+      document.getElementById('studentName').textContent = userInfo.userId || 'No Name';
+      document.getElementById('studentNumber').textContent = userInfo.studentNumber || 'N/A';
+      document.getElementById('semester').textContent = userInfo.semester || 'Unknown';
+      document.getElementById('studentDetails').textContent = `${userInfo.studentNumber} • ${userInfo.semester}`;
+    });
+
+    function handleLogout(event) {
+      event.preventDefault();
+      localStorage.removeItem('userInfo');
+      window.location.href = 'index.html';
+    }
+  </script>
+</body>
+</html>
